@@ -131,8 +131,29 @@ source = [{
     "Genus": "Streptococcus"
   }]
 
-st.title("Penicillin Is Highly Effective vs. Positive Gram Staining Bacteria")
-st.write("This chart shows the effectiveness of Penicillin against various bacteria, highlighting the Gram staining classification. Bacteria with positive Gram staining are particularly susceptible to Penicillin, as indicated by the annotations and the rectangle highlighting the range of effectiveness in which Penicillin is able to stop all positive Gram staining bacteria.")
+st.title("Positive Gram Staining Bacteria is No Match for Penicillin")
+options = {
+    "Mechanism of Action": "Penicillin works by inhibiting the synthesis of bacterial cell walls, which is particularly effective against Gram-positive bacteria.",
+    "History": "Penicillin was discovered by Alexander Fleming in 1928 and has since saved countless lives by treating bacterial infections.",
+    "Usage": "Penicillin is commonly used to treat infections caused by Gram-positive bacteria, such as strep throat and pneumonia.",
+    "Effectiveness": "Penicillin is highly effective against positive Gram staining bacteria.",
+    "Resistance": "Some bacteria have developed resistance to penicillin, making it less effective against certain strains.",
+    "Side Effects": "While generally safe, penicillin can cause allergic reactions in some individuals, ranging from mild rashes to severe anaphylaxis.",
+}
+choice = st.selectbox("Learn more about Penicillin Here:", list(options.keys()))
+st.write(options[choice])
+st.markdown("<br><br>", unsafe_allow_html=True)
+
+options2 = {
+    "What is Gram Staining?": "Gram staining is a laboratory technique used to differentiate bacterial species into two groups based on the characteristics of their cell walls: Gram-positive and Gram-negative.",
+    "Importance of Gram Staining": "Gram staining is crucial in microbiology as it helps identify the type of bacteria, guiding appropriate treatment options.",
+    "Gram-Positive Bacteria": "These bacteria have a thick peptidoglycan layer in their cell walls, which retains the crystal violet stain used in the Gram staining process, appearing purple under a microscope.",
+    "Gram-Negative Bacteria": "These bacteria have a thinner peptidoglycan layer and an outer membrane, which does not retain the crystal violet stain, appearing pink after the counterstain is applied.",
+}
+choice2 = st.selectbox("Learn more about Gram Staining Here:", list(options2.keys()))
+st.write(options2[choice2])
+st.write(" ")
+st.markdown("<br><br>", unsafe_allow_html=True)
 
 source_df = pd.DataFrame(source)
 highlight = alt.selection_point(on='mouseover', fields=['Bacteria'], nearest=True)
@@ -143,7 +164,7 @@ chart = alt.Chart(source_df).mark_circle().encode(
     tooltip=['Bacteria', 'Penicillin', 'Gram_Staining'],
     size=alt.condition(highlight, alt.value(200), alt.value(100))
     ).properties(
-        #title = "Penicillin is Highly Effective vs. Positive Gram Staining Bacteria ",
+        title = "Penicillin is Highly Effective vs. Positive Gram Staining Bacteria ",
         width = 600,
         height = 400
     ).add_params(
@@ -234,12 +255,25 @@ rect = alt.Chart(rectangle_data).mark_rect().encode(
 
 chart + annotation + second_annotation + third_annotation + fourth_annotation + fifth_annotation + rect
 
+
+st.markdown(
+    "<span style='font-size:22px'><b>The chart above shows the effectiveness of Penicillin against various bacteria, highlighting the gram staining classification. Bacteria with positive gram staining are particularly susceptible to Penicillin, as indicated by the annotations and the rectangle highlighting the range of effectiveness in which Penicillin is able to stop all positive gram staining bacteria.</b></span>",
+    unsafe_allow_html=True
+)
+
+st.markdown("<br><br>", unsafe_allow_html=True)
+
 boxplot = alt.Chart(source_df).mark_boxplot(size=80).encode(
-    x=alt.X('Gram_Staining:N', title='Gram Staining'),
-    y=alt.Y('Penicillin:Q', title='Penicillin (units)'),
+   x=alt.X('Gram_Staining:N', title='Gram Staining'),
+    y=alt.Y('Penicillin:Q', title='Penicillin (units)',scale=alt.Scale(type='log')),
     color='Gram_Staining:N'
 ).properties(
-    title='Penicillin Effectiveness by Gram Staining'
+    title='Penicillin Effectiveness by Gram Staining (Log Scale)',
 )
 
 st.altair_chart(boxplot, use_container_width=True)
+
+st.markdown(
+    "<span style='font-size:22px'><b>The boxplot further emphasizes how the range in which the Penicillin dosage needed for positive gram staining bacteria is much smaller than for negative gram staining bacteria. Hover over the plots on the graph to get further information.</b></span>",
+    unsafe_allow_html=True
+)
