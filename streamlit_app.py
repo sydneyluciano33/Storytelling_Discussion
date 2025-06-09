@@ -233,3 +233,13 @@ rect = alt.Chart(rectangle_data).mark_rect().encode(
 )
 
 chart + annotation + second_annotation + third_annotation + fourth_annotation + fifth_annotation + rect
+
+boxplot = alt.Chart(source_df).mark_boxplot(size=80).encode(
+    x=alt.X('Gram_Staining:N', title='Gram Staining'),
+    y=alt.Y('Penicillin:Q', title='Penicillin (units)'),
+    color='Gram_Staining:N'
+).properties(
+    title='Penicillin Effectiveness by Gram Staining'
+)
+
+st.altair_chart(boxplot, use_container_width=True)
